@@ -1,12 +1,14 @@
+'use client';
+
 // Dashboard.tsx
 // James Richmond — Forex Signals Group | Operations Dashboard
 // Stack: React 18 + Tailwind CSS + Recharts
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  BarChart, Bar, Legend
+  BarChart, Bar
 } from "recharts";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -76,10 +78,10 @@ const MOCK_NEEDS_ATTENTION: Lead[] = [
 const MOCK_FUNNEL_DATA = [
   { stage: "Captured", count: 284 },
   { stage: "Contacted", count: 231 },
-  { stage: "Broker Linked", count: 204 },
+  { stage: "Linked", count: 204 },
   { stage: "Deposited", count: 191 },
   { stage: "Trading", count: 134 },
-  { stage: "CPA Cleared", count: 97 },
+  { stage: "Cleared", count: 97 },
 ];
 
 const MOCK_VOLUME_TREND = [
@@ -165,7 +167,7 @@ function StatusRing({ stats }: { stats: Stats }) {
                 strokeWidth={0}
               >
                 {data.map((_, i) => (
-                  <Cell key={i} fill={RING_COLORS[i]} />
+                  <Cell key={`cell-${i}`} fill={RING_COLORS[i]} />
                 ))}
               </Pie>
               <Tooltip
@@ -207,7 +209,7 @@ function LotProgressBar({ pct, lots, target }: { pct: number; lots: number; targ
 function NeedsAttentionPanel({ leads }: { leads: Lead[] }) {
   return (
     <div
-      className="flex flex-col rounded-xl overflow-hidden"
+      className="flex flex-col rounded-xl overflow-hidden h-full"
       style={{ background: C.slateMid, border: `1px solid ${C.slate}` }}
     >
       {/* Header */}
@@ -347,7 +349,6 @@ export default function Dashboard() {
   const [attention] = useState<Lead[]>(MOCK_NEEDS_ATTENTION);
   const [lastRefresh, setLastRefresh] = useState(new Date());
 
-  // In production: replace with Supabase realtime subscription
   const refresh = useCallback(() => setLastRefresh(new Date()), []);
 
   return (
@@ -403,7 +404,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── Ring + Charts Row ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <StatusRing stats={stats} />
           <VolumeTrend />
           <FunnelBar />
