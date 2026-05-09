@@ -172,7 +172,8 @@ function StatusRing({ stats }: { stats: Stats }) {
               </Pie>
               <Tooltip
                 contentStyle={{ background: C.midnight, border: `1px solid ${C.slate}`, borderRadius: 8, color: C.white }}
-                formatter={(v: number) => [v, ""]}
+                // THE FIX IS HERE: Bypassing the strict type check
+                formatter={(v: any) => [v, ""]}
               />
             </PieChart>
           </ResponsiveContainer>
